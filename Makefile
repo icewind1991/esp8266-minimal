@@ -5,8 +5,8 @@ CFLAGS  = -Os -g -Wall -Werror -nostdlib -mlongcalls -std=c11 -flto
 LDFLAGS = -Wl,--gc-sections -T esp8266.ld
 
 flash: build/firmware.elf
-	esptool.py elf2image build/firmware.elf
-	esptool.py --port /dev/ttyUSB0 write_flash 0x00000 build/firmware.elf-0x00000.bin -ff 80m -fm dout
+	esptool.py --chip=esp8266 elf2image build/firmware.elf
+	esptool.py --chip=esp8266 --port /dev/ttyUSB0 write_flash 0x00000 build/firmware.elf-0x00000.bin -ff 80m -fm dout
 
 clean:
 	rm -rf build
