@@ -8,9 +8,9 @@ Code size on my version of the ESP8266 toolchain (GCC 4.8.5):
 
 | configuration    | text      | data | bss |
 | ---------------- | --------- | ---- | --- |
-| UART enabled     | 302 bytes | 0    | 0   |
-| UART disabled    | 243 bytes | 0    | 0   |
-| only timer + LED | 179 bytes | 0    | 0   |
+| UART enabled     | 267 bytes | 0    | 0   |
+| UART disabled    | 201 bytes | 0    | 0   |
+| only timer + LED | 137 bytes | 0    | 0   |
 
 You could trim this down even further with a delay loop instead of using a
 timer.

@@ -1,7 +1,7 @@
 all: build/firmware.elf
 
 CC      = xtensa-lx106-elf-gcc
-CFLAGS  = -Os -g -Wall -Werror -nostdlib -mlongcalls -std=c11
+CFLAGS  = -Os -g -Wall -Werror -nostdlib -mlongcalls -std=c11 -flto
 LDFLAGS = -Wl,--gc-sections -T esp8266.ld
 
 flash: build/firmware.elf
