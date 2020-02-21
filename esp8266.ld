@@ -13,37 +13,47 @@ MEMORY
  */
 ENTRY(main)
 
-SECTIONS
-{
-    /* Mutable global variables.
-     */
-    .data : ALIGN(4)
-    {
-        *(.data)
-        *(.data.*)
-    } >DRAM
 
-    /* Constant global variables.
-     * Note that they still need to be loaded in RAM because the ESP8266 doesn't
-     * allow byte access to flash.
-     */
-    .rodata : ALIGN(4)
-    {
-        *(.rodata)
-        *(.rodata.*)
-    } >DRAM
+/* Define output sections */
+SECTIONS {
+  .dram0.data :
+  {
+    _data_start = ABSOLUTE(.);
+    *(.data)
+    *(.data.*)
+    _data_end = ABSOLUTE(.);
+  } >DRAM
+  /* Shared RAM */
+  .dram0.bss (NOLOAD) :
+  {
+    . = ALIGN (8);
+    _bss_start = ABSOLUTE(.);
+    *(.bss)
+    *(.bss.*)
+    . = ALIGN (8);
+    _bss_end = ABSOLUTE(.);
+  } >DRAM
 
-    /* Global variables that are mutable and zero-initialized.
-     */
-    .bss (NOLOAD) : ALIGN(4)
-    {
-        . = ALIGN (4);
-        _sbss = ABSOLUTE(.);
-        *(.bss)
-        *(.bss.*)
-        . = ALIGN (4);
-        _ebss = ABSOLUTE(.);
-    } >DRAM
+  _sidata = LOADADDR(.dram0.data);
+
+  .dram0.rodata :
+  {
+    _rodata_start = ABSOLUTE(.);
+    *(.rodata)
+    *(.rodata.*)
+    _rodata_end = ABSOLUTE(.);
+    . = ALIGN(4);
+    _heap_start = ABSOLUTE(.);
+  } >DRAM
+
+  .iram.text :
+  {
+    _stext = .;
+    _text_start = ABSOLUTE(.);
+    *(.literal .text .literal.* .text.*)
+    _text_end = ABSOLUTE(.);
+    _etext = .;
+  } > IRAM
 
     /* Constant literals and code. Loaded into IRAM for now. Eventually, most
      * code should be executed directly from flash.

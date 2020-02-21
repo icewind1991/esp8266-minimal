@@ -9,8 +9,8 @@
 // https://github.com/espressif/esp-idf/blob/64654c04447914610586e1ac44457510a5bf7191/components/soc/esp32/i2c_rtc_clk.h#L32
 void rom_i2c_writeReg(uint8_t block, uint8_t host_id, uint8_t reg_add, uint8_t data);
 
-extern uint32_t _sbss[0];
-extern uint32_t _ebss[0];
+extern uint32_t _bss_start;
+extern uint32_t _bss_end;
 
 #if PRINT
 static const char *message = "Hello world!\r\n";
@@ -22,10 +22,9 @@ void sleep_ns(uint64_t nanoseconds);
 int main(void) {
     // Clear .bss section. .data has already been loaded by the ROM bootloader.
     // This may be unnecessary for very small programs.
-    uint32_t *ptr = _sbss;
-    while (ptr != _ebss) {
-        *ptr = 0;
-        ptr++;
+    uint32_t *addr;
+    for (addr = &_bss_start; addr < &_bss_end; addr++) {
+        *addr = 0;
     }
 
     // Initialize PLL.
