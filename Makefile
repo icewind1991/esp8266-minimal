@@ -11,7 +11,7 @@ flash: build/firmware.elf
 clean:
 	rm -rf build
 
-build/firmware.elf: main.c esp8266.h
+build/firmware.elf: main.c esp8266.h esp8266.ld
 	@mkdir -p build
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ main.c
 	size $@
